@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A set of request method cases to indicate the desired action to be performed for a given endpoint.
 public enum HTTPMethod: String {
    case get = "GET"
    case post = "POST"
@@ -19,7 +20,11 @@ public enum HTTPMethod: String {
    case patch = "PATCH"
 }
 
+// MARK: - CustomStringConvertible Conformance
+
 extension HTTPMethod: CustomStringConvertible {
+
+   /// A textual representation of this instance.
    public var description: String {
       rawValue
    }

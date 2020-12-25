@@ -8,7 +8,7 @@
 import Foundation
 
 public extension URLSession {
-   func dataTaskPublisher(for endpoint: APIEndpoint) ->  URLSession.DataTaskPublisher {
+   func dataTaskPublisher(for endpoint: APIEndpoint) -> DataTaskPublisher {
       dataTaskPublisher(for: endpoint.request)
    }
 }

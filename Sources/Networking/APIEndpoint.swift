@@ -108,16 +108,16 @@ public extension APIEndpoint {
    /// Returns a `URL` created from the `APIEndpoint` properties.
    var url: URL {
       var components = URLComponents()
-      
+
       components.scheme = scheme
       components.host = host
       components.path = path
       components.queryItems = queryItems
-      
+
       guard let url = components.url else {
          preconditionFailure("Invalid URL components: \(components)")
       }
-      
+
       return url
    }
 

@@ -101,39 +101,4 @@ final class HTTPMethodTests: XCTestCase {
    private func unwrapErrorMessage(for rawValue: String) -> String {
       "Unable to create instance from the given raw value: \(rawValue)"
    }
-
-   static var allTests = [
-      (
-         "test_InitializationFromRawValueOf_GET_ReturnsValidInstance",
-         test_InitializationFromRawValueOf_GET_ReturnsValidInstance
-      ),
-      (
-         "test_InitializationFromRawValueOf_POST_ReturnsValidInstance",
-         test_InitializationFromRawValueOf_POST_ReturnsValidInstance
-      ),
-      (
-         "test_InitializationFromRawValueOf_PUT_ReturnsValidInstance",
-         test_InitializationFromRawValueOf_PUT_ReturnsValidInstance
-      ),
-      (
-         "test_InitializationFromRawValueOf_DELETE_ReturnsValidInstance",
-         test_InitializationFromRawValueOf_DELETE_ReturnsValidInstance
-      ),
-      (
-         "test_InitializationFromRawValueOf_CONNECT_ReturnsValidInstance",
-         test_InitializationFromRawValueOf_CONNECT_ReturnsValidInstance
-      ),
-      (
-         "test_InitializationFromRawValueOf_OPTIONS_ReturnsValidInstance",
-         test_InitializationFromRawValueOf_OPTIONS_ReturnsValidInstance)
-      ,
-      (
-         "test_InitializationFromRawValueOf_TRACE_ReturnsValidInstance",
-         test_InitializationFromRawValueOf_TRACE_ReturnsValidInstance
-      ),
-      (
-         "test_InitializationFromRawValueOf_PATCH_ReturnsValidInstance",
-         test_InitializationFromRawValueOf_PATCH_ReturnsValidInstance
-      )
-   ]
 }

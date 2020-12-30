@@ -30,28 +30,23 @@ final class URLRequestTests: XCTestCase {
 
    // MARK: Unit Tests
 
-   func test_InitializationFromEndpoint_ReturnsValidInstance() {
+   func test_InitializationFromEndpoint_ReturnsConfiguredURLRequestInstance() {
       // Given
       let urlRequest = URLRequest(endpoint: endpoint)
 
       // Then
-
-      XCTAssertEqual(urlRequest.httpBody, nil)
-      XCTAssertEqual(urlRequest.httpMethod, "GET")
-      XCTAssertEqual(urlRequest.timeoutInterval, 60.0)
-      XCTAssertEqual(urlRequest.allowsCellularAccess, true)
-      XCTAssertEqual(urlRequest.url, MockEndpoint.validationUrl)
-      XCTAssertEqual(urlRequest.allowsExpensiveNetworkAccess, false)
-      XCTAssertEqual(urlRequest.allowsConstrainedNetworkAccess, true)
-      XCTAssertEqual(urlRequest.cachePolicy, .useProtocolCachePolicy)
-      XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
+      validateCommonAsserts(for: urlRequest)
    }
 
-   func test_APIEndpointRequestProperty_ReturnsValidURLRequestInstance() {
+   func test_APIEndpointRequestProperty_ReturnsConfiguredURLRequestInstance() {
       // Given
       let urlRequest = endpoint.request
 
       // Then
+      validateCommonAsserts(for: urlRequest)
+   }
+
+   private func validateCommonAsserts(for urlRequest: URLRequest) {
       XCTAssertEqual(urlRequest.httpBody, nil)
       XCTAssertEqual(urlRequest.httpMethod, "GET")
       XCTAssertEqual(urlRequest.timeoutInterval, 60.0)

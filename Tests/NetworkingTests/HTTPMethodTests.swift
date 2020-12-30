@@ -10,6 +10,8 @@ import XCTest
 
 final class HTTPMethodTests: XCTestCase {
 
+   // MARK: - Unit Tests
+
    func test_InitializationFromRawValueOf_GET_ReturnsValidInstance() throws {
       // Given
       let rawValue = "GET"
@@ -97,6 +99,8 @@ final class HTTPMethodTests: XCTestCase {
       XCTAssertEqual(patchMethod, .patch)
       XCTAssertEqual(patchMethod.description, rawValue)
    }
+
+   // MARK: - Helper Methods
 
    private func unwrapErrorMessage(for rawValue: String) -> String {
       "Unable to create instance from the given raw value: \(rawValue)"

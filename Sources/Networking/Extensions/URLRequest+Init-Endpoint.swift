@@ -8,7 +8,9 @@
 import Foundation
 
 public extension URLRequest {
-   init(endpoint: APIEndpoint) {
+   /// Creates an Instance of an `URLRequest` from any `Endpoint` passed in
+   /// - Parameter endpoint: Accepts any object that conforms to the `Endpoint` protocol.
+   init(endpoint: Endpoint) {
       self.init(url: endpoint.url,
                 cachePolicy:endpoint.cachePolicy,
                 timeoutInterval: endpoint.timeoutInterval)

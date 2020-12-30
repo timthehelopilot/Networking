@@ -10,9 +10,28 @@ import XCTest
 
 final class URLRequestTests: XCTestCase {
 
+   // MARK: Properties
+
+   private var endpoint: Endpoint!
+
+   // MARK: Overrides
+
+   override func setUp() {
+      super.setUp()
+
+      endpoint = MockEndpoint()
+   }
+
+   override func tearDown() {
+      endpoint = nil
+
+      super.tearDown()
+   }
+
+   // MARK: Unit Tests
+
    func test_InitializationFromEndpoint_ReturnsValidInstance() {
       // Given
-      let endpoint = MockEndpoint()
       let urlRequest = URLRequest(endpoint: endpoint)
 
       // Then
@@ -30,7 +49,6 @@ final class URLRequestTests: XCTestCase {
 
    func test_APIEndpointRequestProperty_ReturnsValidURLRequestInstance() {
       // Given
-      let endpoint = MockEndpoint()
       let urlRequest = endpoint.request
 
       // Then
@@ -48,7 +66,7 @@ final class URLRequestTests: XCTestCase {
 
 // MARK: - Mock Test Data
 
-fileprivate struct MockEndpoint: APIEndpoint {
+fileprivate struct MockEndpoint: Endpoint {
    static var validationUrl: URL {
       URL(string: "https://www.test.com/testing?filter=music")!
    }

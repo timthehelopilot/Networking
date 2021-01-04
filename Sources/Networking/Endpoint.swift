@@ -54,64 +54,50 @@ public protocol Endpoint {
    var url: URL { get }
 }
 
-// MARK: - Endpoint Common Values
+// MARK: - Endpoint Default Property Implementations
 
 public extension Endpoint {
 
-   /// The scheme subcomponent of the URL. Default value: `https`.
    var scheme: String {
       "https"
    }
 
-   /// An array of `URLQueryItems`. Will be appended in the order they are listed in the `Array`. Default value: `nil`.
    var queryItems: [URLQueryItem]? {
       nil
    }
 
-   /// The HTTP request method of the receiver. Default value: GET
    var httpMethod: HTTPMethod {
       .get
    }
 
-   /// A dictionary containing all the HTTP header fields of the receiver. Default value: `nil`.
    var httpHeaderFields: [String: String]? {
       nil
    }
 
-   /// This data is sent as the message body of the request, as in done in an HTTP POST request. Default value: `nil`.
    var httpBody: Data? {
       nil
    }
 
-   /// The cache policy of the receiver. Default value: `.useProtocolCachePolicy`.
    var cachePolicy: CachePolicy {
       .useProtocolCachePolicy
    }
 
-   /// Returns the timeout interval of the receiver. Default value: 60 seconds.
    var timeoutInterval: TimeInterval {
       60.0
    }
 
-   /// `true` if the receiver is allowed to use the built in cellular radios to satisfy the request, `false` otherwise.
-   /// Default value: `true`
    var allowsCellularAccess: Bool {
       true
    }
 
-   /// `true` if the receiver is allowed to use an interface marked as expensive to satisfy the request, `false` otherwise.
-   /// Default value: `true`
    var allowsExpensiveNetworkAccess: Bool {
       true
    }
 
-   /// `true` if the receiver is allowed to use an interface marked as constrained to satisfy the request, `false` otherwise.
-   /// Default value: `true`
    var allowsConstrainedNetworkAccess: Bool {
       true
    }
 
-   /// Returns a `URL` created from the `Endpoint` instance.
    var url: URL {
       var components = URLComponents()
 
@@ -127,7 +113,6 @@ public extension Endpoint {
       return url
    }
 
-   /// A URL load request that is independent of protocol or URL scheme. Created from the `Endpoint` instance.
    var request: URLRequest {
       URLRequest(endpoint: self)
    }

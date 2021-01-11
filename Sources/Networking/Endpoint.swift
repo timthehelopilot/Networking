@@ -35,6 +35,9 @@ public protocol Endpoint {
    /// The cache policy of the receiver.
    var cachePolicy: CachePolicy { get }
 
+   /// Status codes to indicate whether a specific HTTP request has been successfully completed
+   var validStatusCodes: [Int] { get }
+
    /// Returns the timeout interval of the receiver.
    var timeoutInterval: TimeInterval { get }
 
@@ -80,6 +83,10 @@ public extension Endpoint {
 
    var cachePolicy: CachePolicy {
       .useProtocolCachePolicy
+   }
+
+   var validStatusCodes: [Int] {
+      Array(200...299)
    }
 
    var timeoutInterval: TimeInterval {

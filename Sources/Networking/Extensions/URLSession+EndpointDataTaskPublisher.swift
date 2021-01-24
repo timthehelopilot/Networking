@@ -5,13 +5,17 @@
 //  Created by Timothy Barrett on 12/12/20.
 //
 
+import Combine
 import Foundation
 
-public extension URLSession {
-   /// Creates a Combine `DataTaskPublisher` from an `Endpoint`
-   /// - Parameter endpoint: Accepts any object that conforms to the `Endpoint` protocol.
-   /// - Returns: `DataTaskPublisher`
-   func dataTaskPublisher(for endpoint: Endpoint) -> DataTaskPublisher {
+extension URLSession: OAuthSession {
+   public typealias DataTaskHTTPResponse = (data: Data, response: HTTPURLResponse)
+   public typealias DataTaskResponse = (data: Data, response: URLResponse)
+
+   public func dataTaskPublisher(for endpoint: Endpoint)
+                                 -> AnyPublisher<DataTaskResponse, URLError> {
+
       dataTaskPublisher(for: endpoint.request)
+         .eraseToAnyPublisher()
    }
 }

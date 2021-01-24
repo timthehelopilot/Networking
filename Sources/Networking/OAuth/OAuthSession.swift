@@ -9,5 +9,9 @@ import Combine
 import Foundation
 
 public protocol OAuthSession: AnyObject {
-   // still to do after designing the process
+   /// Creates an `AnyPublisher<(data: Data, response: URLResponse), URLError>` from an `Endpoint`
+   /// - Parameter endpoint: Accepts any object that conforms to the `Endpoint` protocol.
+   /// - Returns: `AnyPublisher<(data: Data, response: URLResponse), URLError>`
+   func dataTaskPublisher(for endpoint: Endpoint)
+                          -> AnyPublisher<(data: Data, response: URLResponse), URLError>
 }

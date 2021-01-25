@@ -5,8 +5,8 @@
 //  Created by Timothy Barrett on 1/12/21.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 /// A class that takes care of storing and retrieving an OAuth token for the given endpoint when initialized.
 final public class Authenticator {
@@ -22,12 +22,6 @@ final public class Authenticator {
    /// The current state of the OAuth state. This will be nil if the user is not logged in.
    private var currentState: OAuthState?
 
-   /// The initial endpoint to retrieve the first token used for all OAuth requests.
-   private var initialTokenEndpoint: Endpoint
-
-   /// The refresh endpoint to retrieve a refreshed token for all OAuth requests.
-   private var refreshTokenEndpoint: Endpoint
-
    /// The publisher responsible for emitting the OAuth token if multiple token requests are initiated.
    private var refreshPublisher: AnyPublisher<OAuthState, HTTPError>?
 
@@ -37,27 +31,19 @@ final public class Authenticator {
    /// - Parameters:
    ///   - session: A configured `URLSession` instance used for all OAuth requests.
    ///   - currentState: The current OAuth token for all authentication requests.
-   ///   - initialTokenEndpoint: The endpoint that is needed to retrieve the initial token.
-   ///   - refreshTokenEndpoint: The endpoint needed for all token refresh requests.
-   public init(session: OAuthSession,
-               currentState: OAuthState?,
-               initialTokenEndpoint: Endpoint,
-               refreshTokenEndpoint: Endpoint) {
-
+   public init(session: OAuthSession, currentState: OAuthState?) {
       self.session = session
       self.currentState = currentState
-      self.initialTokenEndpoint = initialTokenEndpoint
-      self.refreshTokenEndpoint = refreshTokenEndpoint
    }
 
    // MARK: - API
 
    /// TA publisher that will emit the current valid OAuth token is user is authenticated.
    /// - Parameters:
+   ///   - endpoint: The endpoint to retrieve the required OAuth token.
    ///   - forceRefresh: Wether to force a refresh token call regardless of the current expiration date. Default is `false`.
-   ///   - initialToken: Determines if this is the first time retrieving an OAuth token. Default is  `false`.
    /// - Returns: A publisher that retrieves a OAuth token and publishes the result.
-   public func validOAuthState(forceRefresh: Bool = false, initialToken: Bool = false)
+   public func validOAuthState(endpoint: Endpoint, forceRefresh: Bool = false)
                                -> AnyPublisher<OAuthState, HTTPError> {
 
       authenticationQueue.sync { [unowned self] in
@@ -68,7 +54,7 @@ final public class Authenticator {
          }
 
          // Scenario 2: We don't have an OAuthState at all, The user is required to log in.
-         guard let currentState = currentState, !initialToken else {
+         guard let currentState = currentState else {
             return Fail(error: HTTPError.logInRequired)
                .eraseToAnyPublisher()
          }
@@ -81,7 +67,6 @@ final public class Authenticator {
          }
 
          // Scenario 4: We need a new OAuthState
-         let endpoint = initialToken ? initialTokenEndpoint : refreshTokenEndpoint
          let publisher = session.dataTaskPublisher(for: endpoint)
             .share()
             .mapToHTTPResponse()

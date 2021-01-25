@@ -15,20 +15,22 @@ final class EndpointTests: XCTestCase {
       let defaultEndpoint = MockEndpointDefaultConfiguration()
 
       // Then
+
+      XCTAssertEqual(defaultEndpoint.httpBody, nil)
       XCTAssertEqual(defaultEndpoint.scheme, "https")
-      XCTAssertEqual(defaultEndpoint.host, "www.testing.com")
-      XCTAssertEqual(defaultEndpoint.path, "/testing/unit")
       XCTAssertEqual(defaultEndpoint.queryItems, nil)
       XCTAssertEqual(defaultEndpoint.httpMethod, .get)
       XCTAssertEqual(defaultEndpoint.httpHeaderFields, nil)
-      XCTAssertEqual(defaultEndpoint.httpBody, nil)
-      XCTAssertEqual(defaultEndpoint.cachePolicy, .useProtocolCachePolicy)
       XCTAssertEqual(defaultEndpoint.timeoutInterval, 60.0)
+      XCTAssertEqual(defaultEndpoint.path, "/testing/unit")
+      XCTAssertEqual(defaultEndpoint.validStatusCodes, Array(200...299))
+      XCTAssertEqual(defaultEndpoint.host, "www.testing.com")
       XCTAssertEqual(defaultEndpoint.allowsCellularAccess, true)
       XCTAssertEqual(defaultEndpoint.allowsExpensiveNetworkAccess, true)
       XCTAssertEqual(defaultEndpoint.allowsConstrainedNetworkAccess, true)
-      XCTAssertEqual(defaultEndpoint.url, MockEndpointDefaultConfiguration.validationUrl)
+      XCTAssertEqual(defaultEndpoint.cachePolicy, .useProtocolCachePolicy)
       XCTAssertEqual(defaultEndpoint.request, URLRequest(endpoint: defaultEndpoint))
+      XCTAssertEqual(defaultEndpoint.url, MockEndpointDefaultConfiguration.validationUrl)
    }
 
    func test_CustomEndpoint_ReturnsCorrectValues() {
@@ -36,20 +38,22 @@ final class EndpointTests: XCTestCase {
       let customEndpoint = MockEndpointCustomConfiguration()
 
       // Then
+
       XCTAssertEqual(customEndpoint.scheme, "http")
-      XCTAssertEqual(customEndpoint.host, "www.testing.com")
-      XCTAssertEqual(customEndpoint.path, "/weather/local")
-      XCTAssertEqual(customEndpoint.queryItems, [URLQueryItem(name: "city", value: "76102")])
       XCTAssertEqual(customEndpoint.httpMethod, .post)
-      XCTAssertEqual(customEndpoint.httpHeaderFields, ["Content-Type": "application/json"])
-      XCTAssertEqual(customEndpoint.httpBody, MockEndpointCustomConfiguration.validationBody)
-      XCTAssertEqual(customEndpoint.cachePolicy, .returnCacheDataElseLoad)
       XCTAssertEqual(customEndpoint.timeoutInterval, 30.0)
+      XCTAssertEqual(customEndpoint.path, "/weather/local")
+      XCTAssertEqual(customEndpoint.host, "www.testing.com")
+      XCTAssertEqual(customEndpoint.validStatusCodes, [200])
       XCTAssertEqual(customEndpoint.allowsCellularAccess, true)
       XCTAssertEqual(customEndpoint.allowsExpensiveNetworkAccess, false)
       XCTAssertEqual(customEndpoint.allowsConstrainedNetworkAccess, false)
-      XCTAssertEqual(customEndpoint.url, MockEndpointCustomConfiguration.validationUrl)
+      XCTAssertEqual(customEndpoint.cachePolicy, .returnCacheDataElseLoad)
       XCTAssertEqual(customEndpoint.request, URLRequest(endpoint: customEndpoint))
+      XCTAssertEqual(customEndpoint.url, MockEndpointCustomConfiguration.validationUrl)
+      XCTAssertEqual(customEndpoint.httpHeaderFields, ["Content-Type": "application/json"])
+      XCTAssertEqual(customEndpoint.queryItems, [URLQueryItem(name: "city", value: "76102")])
+      XCTAssertEqual(customEndpoint.httpBody, MockEndpointCustomConfiguration.validationBody)
    }
 }
 
@@ -108,6 +112,10 @@ fileprivate struct MockEndpointCustomConfiguration: Endpoint {
    
    var cachePolicy: CachePolicy {
       .returnCacheDataElseLoad
+   }
+
+   var validStatusCodes: [Int] {
+      [200]
    }
    
    var timeoutInterval: TimeInterval {

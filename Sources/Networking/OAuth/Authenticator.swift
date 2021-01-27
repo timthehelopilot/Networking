@@ -11,6 +11,14 @@ import Foundation
 /// A class that takes care of storing and retrieving an OAuth token for the given endpoint when initialized.
 final public class Authenticator {
 
+   // MARK: - Types
+
+   public struct KeychainInfo {
+      public var service: String
+      public var account: String
+      public var accessGroup: String?
+   }
+
    // MARK: - Properties
 
    /// The queue that all methods for this class will run on. Prefixed with the Authenticator label.
@@ -25,15 +33,26 @@ final public class Authenticator {
    /// The publisher responsible for emitting the OAuth token if multiple token requests are initiated.
    private var refreshPublisher: AnyPublisher<OAuthState, HTTPError>?
 
+   ///
+   private var keychain: KeychainInfo
+
+   ///
+   private var keychainOAuthItem: KeychainPasswordItem {
+      KeychainPasswordItem(service: keychain.service,
+                           account: keychain.account,
+                           accessGroup: keychain.accessGroup)
+   }
+
    // MARK: - Initialization
 
    /// Creates and Authenticator instance that manages the OAuth token and refreshes when needed.
    /// - Parameters:
    ///   - session: A configured `URLSession` instance used for all OAuth requests.
-   ///   - currentState: The current OAuth token for all authentication requests.
-   public init(session: OAuthSession, currentState: OAuthState?) {
+   ///   - keychainAccount: The keychain info on where to store the OAuth state.
+   public init(session: OAuthSession, keychain: KeychainInfo) {
       self.session = session
-      self.currentState = currentState
+      self.keychain = keychain
+      self.currentState = loadOAuthState()
    }
 
    // MARK: - API
@@ -43,7 +62,9 @@ final public class Authenticator {
    ///   - endpoint: The endpoint to retrieve the required OAuth token.
    ///   - forceRefresh: Wether to force a refresh token call regardless of the current expiration date. Default is `false`.
    /// - Returns: A publisher that retrieves a OAuth token and publishes the result.
-   public func validOAuthState(endpoint: Endpoint, forceRefresh: Bool = false)
+   public func validOAuthState(endpoint: Endpoint,
+                               initialRequest: Bool = false,
+                               forceRefresh: Bool = false)
                                -> AnyPublisher<OAuthState, HTTPError> {
 
       authenticationQueue.sync { [unowned self] in
@@ -53,14 +74,15 @@ final public class Authenticator {
             return refreshPublisher
          }
 
-         // Scenario 2: We don't have an OAuthState at all, The user is required to log in.
-         guard let currentState = currentState else {
+         // Scenario 2: We don't have an OAuthState at all, The user is required to log in
+         // or if initialRequest is true then continue to get an initial OAuth state.
+         guard currentState != nil || initialRequest else {
             return Fail(error: HTTPError.logInRequired)
                .eraseToAnyPublisher()
          }
 
          // Scenario 3: We already have a valid OAuthState and don't want to force a refresh.
-         if currentState.isValid, !forceRefresh {
+         if let currentState = currentState, currentState.isValid, !forceRefresh {
             return Just(currentState)
                .setFailureType(to: HTTPError.self)
                .eraseToAnyPublisher()
@@ -74,6 +96,7 @@ final public class Authenticator {
             .decoding(type: OAuthState.self, decoder: JSONDecoder.oAuthStateJSONDecoder)
             .handleEvents(receiveOutput: { newState in
                self.currentState = newState
+               saveOAuthState(newState)
             }, receiveCompletion: { _ in
                authenticationQueue.sync {
                   refreshPublisher = nil
@@ -85,5 +108,17 @@ final public class Authenticator {
 
          return publisher
       }
+   }
+
+   private func loadOAuthState() -> OAuthState? {
+      try? keychainOAuthItem.readObject()
+   }
+
+   private func saveOAuthState(_ state: OAuthState) {
+      try? keychainOAuthItem.saveJSON(state)
+   }
+
+   public func clearOAuthState() {
+      try? keychainOAuthItem.deleteItem()
    }
 }

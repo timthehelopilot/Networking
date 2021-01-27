@@ -32,3 +32,30 @@ public enum HTTPError: Error {
       }
    }
 }
+
+// MARK: - Equatable Conformance // check if it all works correctly
+
+extension HTTPError: Equatable {
+   public static func == (lhs: HTTPError, rhs: HTTPError) -> Bool {
+      switch (lhs, rhs) {
+      case (let .networkError(lhsError), let .networkError(rhsError)):
+         return lhsError == rhsError
+
+      case (let .decodingError(lhsError), let .decodingError(rhsError)):
+         return lhsError.localizedDescription == rhsError.localizedDescription
+
+      case (let .unacceptableStatusCode(lhsCode, lhsData),
+            let .unacceptableStatusCode(rhsCode, rhsData)):
+         return lhsCode == rhsCode && lhsData == rhsData
+
+      case (logInRequired, logInRequired):
+         return true
+
+      case (nonHTTPResponse, nonHTTPResponse):
+         return true
+
+      default:
+         return false
+      }
+   }
+}

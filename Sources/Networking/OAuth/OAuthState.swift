@@ -8,7 +8,7 @@
 import Foundation
 
 /// Used for storing the credentials to access all Netatmo endpoints.
-public struct OAuthState: Codable {
+public struct OAuthState: Codable, Equatable {
 
    // MARK: - Properties
 

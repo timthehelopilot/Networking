@@ -1,5 +1,5 @@
 //
-//  OAuthStateModelTests.swift
+//  OAuthStateTests.swift
 //
 //
 //  Created by Timothy Barrett on 1/5/21.
@@ -8,7 +8,7 @@
 import XCTest
 @testable import Networking
 
-final class OAuthStateModelTests: XCTestCase {
+final class OAuthStateTests: XCTestCase {
 
    // MARK: - Tests
 

@@ -40,7 +40,7 @@ final class URLRequestTests: XCTestCase {
 
    func test_APIEndpointRequestProperty_ReturnsConfiguredURLRequestInstance() {
       // Given
-      let urlRequest = endpoint.request
+      let urlRequest = endpoint.request()
 
       // Then
       validateCommonAsserts(for: urlRequest)

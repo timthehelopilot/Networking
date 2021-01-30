@@ -29,8 +29,8 @@ final class EndpointTests: XCTestCase {
       XCTAssertEqual(defaultEndpoint.allowsExpensiveNetworkAccess, true)
       XCTAssertEqual(defaultEndpoint.allowsConstrainedNetworkAccess, true)
       XCTAssertEqual(defaultEndpoint.cachePolicy, .useProtocolCachePolicy)
-      XCTAssertEqual(defaultEndpoint.request, URLRequest(endpoint: defaultEndpoint))
-      XCTAssertEqual(defaultEndpoint.url, MockEndpointDefaultConfiguration.validationUrl)
+      XCTAssertEqual(defaultEndpoint.request(), URLRequest(endpoint: defaultEndpoint))
+      XCTAssertEqual(defaultEndpoint.url(), MockEndpointDefaultConfiguration.validationUrl)
    }
 
    func test_CustomEndpoint_ReturnsCorrectValues() {
@@ -49,8 +49,8 @@ final class EndpointTests: XCTestCase {
       XCTAssertEqual(customEndpoint.allowsExpensiveNetworkAccess, false)
       XCTAssertEqual(customEndpoint.allowsConstrainedNetworkAccess, false)
       XCTAssertEqual(customEndpoint.cachePolicy, .returnCacheDataElseLoad)
-      XCTAssertEqual(customEndpoint.request, URLRequest(endpoint: customEndpoint))
-      XCTAssertEqual(customEndpoint.url, MockEndpointCustomConfiguration.validationUrl)
+      XCTAssertEqual(customEndpoint.request(), URLRequest(endpoint: customEndpoint))
+      XCTAssertEqual(customEndpoint.url(), MockEndpointCustomConfiguration.validationUrl)
       XCTAssertEqual(customEndpoint.httpHeaderFields, ["Content-Type": "application/json"])
       XCTAssertEqual(customEndpoint.queryItems, [URLQueryItem(name: "city", value: "76102")])
       XCTAssertEqual(customEndpoint.httpBody, MockEndpointCustomConfiguration.validationBody)

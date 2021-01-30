@@ -33,7 +33,7 @@ public enum HTTPError: Error {
    }
 }
 
-// MARK: - Equatable Conformance // check if it all works correctly
+// MARK: - Equatable Conformance
 
 extension HTTPError: Equatable {
    public static func == (lhs: HTTPError, rhs: HTTPError) -> Bool {

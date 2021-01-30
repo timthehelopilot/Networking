@@ -50,11 +50,13 @@ public protocol Endpoint {
    /// `true` if the receiver is allowed to use an interface marked as constrained to satisfy the request, `false` otherwise.
    var allowsConstrainedNetworkAccess: Bool { get }
 
-   /// A `URL` load request that is independent of protocol or `URL` scheme.
-   var request: URLRequest { get }
-
    /// The URL of the receiver.
-   var url: URL { get }
+   /// - Parameter refreshToken: This is the OAuth token for the given `Endpoint`
+   func url(refreshToken: String?) -> URL
+
+   /// A `URL` load request that is independent of protocol or `URL` scheme.
+   /// - Parameter refreshToken: This is the OAuth token for the given `Endpoint`
+   func request(refreshToken: String?) -> URLRequest
 }
 
 // MARK: - Endpoint Default Property Implementations
@@ -105,13 +107,22 @@ public extension Endpoint {
       true
    }
 
-   var url: URL {
+   func url(refreshToken: String? = nil) -> URL {
       var components = URLComponents()
+
+      if let refreshToken = refreshToken {
+         var queryItems = [URLQueryItem(name: "refresh_token", value: refreshToken)]
+
+         queryItems.append(contentsOf: self.queryItems ?? [])
+
+         components.queryItems = queryItems
+      } else {
+         components.queryItems = queryItems
+      }
 
       components.scheme = scheme
       components.host = host
       components.path = path
-      components.queryItems = queryItems
 
       guard let url = components.url else {
          preconditionFailure("Invalid URL components: \(components)")
@@ -120,7 +131,7 @@ public extension Endpoint {
       return url
    }
 
-   var request: URLRequest {
-      URLRequest(endpoint: self)
+   func request(refreshToken: String? = nil) -> URLRequest {
+      URLRequest(endpoint: self, refreshToken: refreshToken)
    }
 }

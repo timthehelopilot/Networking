@@ -13,7 +13,7 @@ final public class Authenticator {
 
    // MARK: - Types
 
-   public struct KeychainInfo {
+   public struct KeychainConfiguration {
       public var service: String
       public var account: String
       public var accessGroup: String?
@@ -34,7 +34,7 @@ final public class Authenticator {
    private var refreshPublisher: AnyPublisher<OAuthState, HTTPError>?
 
    ///
-   private var keychain: KeychainInfo
+   private var keychain: KeychainConfiguration
 
    ///
    private var keychainOAuthItem: KeychainPasswordItem {
@@ -49,7 +49,7 @@ final public class Authenticator {
    /// - Parameters:
    ///   - session: A configured `URLSession` instance used for all OAuth requests.
    ///   - keychainAccount: The keychain info on where to store the OAuth state.
-   public init(session: OAuthSession, keychain: KeychainInfo) {
+   public init(session: OAuthSession, keychain: KeychainConfiguration) {
       self.session = session
       self.keychain = keychain
       self.currentState = loadOAuthState()
@@ -89,7 +89,8 @@ final public class Authenticator {
          }
 
          // Scenario 4: We need a new OAuthState
-         let publisher = session.dataTaskPublisher(for: endpoint)
+         let publisher = session.dataTaskPublisher(for: endpoint,
+                                                   refreshToken: currentState?.refreshToken)
             .share()
             .mapToHTTPResponse()
             .responseData(validStatusCodes: endpoint.validStatusCodes)
@@ -118,7 +119,17 @@ final public class Authenticator {
       try? keychainOAuthItem.saveJSON(state)
    }
 
-   public func clearOAuthState() {
-      try? keychainOAuthItem.deleteItem()
+   public func clearOAuthState() -> AnyPublisher<Void, Error> {
+      Deferred {
+         Future { promise in
+            do {
+               try self.keychainOAuthItem.deleteItem()
+               promise(.success(()))
+            } catch {
+               promise(.failure(error))
+            }
+         }
+      }
+      .eraseToAnyPublisher()
    }
 }

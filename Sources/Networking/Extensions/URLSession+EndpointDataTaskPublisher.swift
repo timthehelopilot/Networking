@@ -12,10 +12,11 @@ extension URLSession: OAuthSession {
    public typealias DataTaskHTTPResponse = (data: Data, response: HTTPURLResponse)
    public typealias DataTaskResponse = (data: Data, response: URLResponse)
 
-   public func dataTaskPublisher(for endpoint: Endpoint)
+   public func dataTaskPublisher(for endpoint: Endpoint,
+                                 refreshToken: String? = nil)
                                  -> AnyPublisher<DataTaskResponse, URLError> {
 
-      dataTaskPublisher(for: endpoint.request)
+      dataTaskPublisher(for: endpoint.request(refreshToken: refreshToken))
          .eraseToAnyPublisher()
    }
 }

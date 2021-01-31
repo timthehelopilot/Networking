@@ -13,6 +13,7 @@ final public class Authenticator {
 
    // MARK: - Types
 
+   /// A struct for the configuration of an item to save to keychain.
    public struct KeychainConfiguration {
       public var service: String
       public var account: String
@@ -33,10 +34,10 @@ final public class Authenticator {
    /// The publisher responsible for emitting the OAuth token if multiple token requests are initiated.
    private var refreshPublisher: AnyPublisher<OAuthState, HTTPError>?
 
-   ///
+   /// The configuration for saving the OAuthState to keychain
    private var keychain: KeychainConfiguration
 
-   ///
+   /// The password item used to save or retrieve the OAuthState for OAuth 2 requests.
    private var keychainOAuthItem: KeychainPasswordItem {
       KeychainPasswordItem(service: keychain.service,
                            account: keychain.account,

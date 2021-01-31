@@ -15,12 +15,17 @@ final class URLSessionEndpointDataTaskPublisherTests: BasePublisherTestCase {
 
    func test_URLSessionEndpointDataTaskPublisher_EmitsResponse() {
       // Given
+      let title = "sunt aut facere repellat provident occaecati excepturi optio reprehenderit"
+      let body = """
+      quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit \
+      molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto
+      """
       let publisherExpectation = expectation(description: "Publisher Finished")
       let endpoint = TestEndpoint()
       let post = TestPost(id: 1,
                           userId: 1,
-                          title: "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-                          body: "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto")
+                          title: title,
+                          body: body)
       let publisher = URLSession.shared.dataTaskPublisher(for: endpoint)
       var completion: Subscribers.Completion<HTTPError>?
       var result: TestPost?

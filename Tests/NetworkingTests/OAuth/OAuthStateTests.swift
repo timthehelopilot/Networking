@@ -34,7 +34,7 @@ final class OAuthStateTests: XCTestCase {
       super.tearDown()
    }
 
-   // MARK: Unit Tests
+   // MARK: - Unit Tests
 
    func test_Initialization_ReturnsValidInstance() {
       // Given

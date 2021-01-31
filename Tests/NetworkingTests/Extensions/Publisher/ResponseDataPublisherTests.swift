@@ -12,7 +12,7 @@ import XCTest
 final class ResponseDataPublisherTests: BasePublisherTestCase {
    private typealias DataTaskResponse = URLSession.DataTaskHTTPResponse
 
-   // MARK: Unit Tests
+   // MARK: - Unit Tests
 
    func test_ResponseDataPublisher_EmitsResponseForValidStatusCodes() {
       // Given

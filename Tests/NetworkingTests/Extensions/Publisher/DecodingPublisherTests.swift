@@ -11,7 +11,7 @@ import XCTest
 
 final class DecodingPublisherTests: BasePublisherTestCase {
 
-   // MARK: Unit Tests
+   // MARK: - Unit Tests
 
    func test_DecodingPublisher_EmitsDecodedObject() throws {
       // Given
@@ -27,7 +27,6 @@ final class DecodingPublisherTests: BasePublisherTestCase {
                receiveValue: { result = $0 })
          .store(in: &cancelables)
 
-
       // When
       subject.send(data)
       subject.send(completion: .finished)
@@ -35,8 +34,8 @@ final class DecodingPublisherTests: BasePublisherTestCase {
       // Then
       XCTAssertNotNil(result)
       XCTAssertNotNil(completion)
-      XCTAssertEqual(completion, .finished)
       XCTAssertEqual(result, state)
+      XCTAssertEqual(completion, .finished)
    }
 
    func test_DecodingPublisher_EmitsHTTPError() {
@@ -77,7 +76,6 @@ final class DecodingPublisherTests: BasePublisherTestCase {
          .sink(receiveCompletion: { completion = $0 },
                receiveValue: { result = $0 })
          .store(in: &cancelables)
-
 
       // When
       subject.send(data)

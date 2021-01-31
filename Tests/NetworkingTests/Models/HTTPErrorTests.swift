@@ -10,7 +10,7 @@ import XCTest
 
 final class HTTPErrorTests: XCTestCase {
 
-   // MARK: Unit Tests
+   // MARK: - Unit Tests
 
    func test_LoginRequiredError_ComparedToNetworkError_ReturnsFalse() {
       // Given

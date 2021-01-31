@@ -13,7 +13,7 @@ final class MapToHTTPResponsePublisherTests: BasePublisherTestCase {
    private typealias DataTaskResponse = URLSession.DataTaskResponse
    private typealias DataTaskHTTPResponse = URLSession.DataTaskHTTPResponse
 
-   // MARK: Unit Tests
+   // MARK: - Unit Tests
 
    func test_MapToHTTPResponsePublisher_EmitsResponseObject() {
       // Given
@@ -82,7 +82,6 @@ final class MapToHTTPResponsePublisherTests: BasePublisherTestCase {
          .sink(receiveCompletion: { completion = $0 },
                receiveValue: { result = $0 })
          .store(in: &cancelables)
-
 
       // When
       subject.send(completion: .failure(error))

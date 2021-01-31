@@ -62,6 +62,8 @@ final class URLRequestTests: XCTestCase {
       validateWithTokenCommonAsserts(for: urlRequest)
    }
 
+   // MARK: Helper Methods
+
    private func validateCommonAsserts(for urlRequest: URLRequest) {
       XCTAssertEqual(urlRequest.httpBody, nil)
       XCTAssertEqual(urlRequest.httpMethod, "GET")

@@ -10,11 +10,23 @@ import XCTest
 
 final class HTTPErrorTests: XCTestCase {
 
+   // MARK: Unit Tests
+
+   func test_LoginRequiredError_ComparedToNetworkError_ReturnsFalse() {
+      // Given
+      let loginRequired: HTTPError = .logInRequired
+      let networkError: HTTPError = .networkError(URLError(.cancelled))
+
+      // Then
+      XCTAssertNotEqual(loginRequired, networkError)
+   }
+
    func test_LogInRequired_ShouldRetryReturnsFalse() {
       // Given
       let loginRequired: HTTPError = .logInRequired
 
       // Then
+      XCTAssertEqual(loginRequired, .logInRequired)
       XCTAssertEqual(loginRequired.shouldRetry, false)
    }
 
@@ -23,6 +35,7 @@ final class HTTPErrorTests: XCTestCase {
       let nonHTTPResponse: HTTPError = .nonHTTPResponse
 
       // Then
+      XCTAssertEqual(nonHTTPResponse, .nonHTTPResponse)
       XCTAssertEqual(nonHTTPResponse.shouldRetry, true)
    }
 
@@ -32,6 +45,7 @@ final class HTTPErrorTests: XCTestCase {
 
       // Then
       XCTAssertEqual(networkError.shouldRetry, true)
+      XCTAssertEqual(networkError, .networkError(URLError(.cancelled)))
    }
 
    func test_DecodingError_ShouldRetryReturnsFalse() {
@@ -41,6 +55,7 @@ final class HTTPErrorTests: XCTestCase {
       let decodingError: HTTPError = .decodingError(decodingErrorContext)
 
       // Then
+      XCTAssertEqual(decodingError, decodingError)
       XCTAssertEqual(decodingError.shouldRetry, false)
    }
 
@@ -50,6 +65,7 @@ final class HTTPErrorTests: XCTestCase {
 
       // Then
       XCTAssertEqual(timeoutError.shouldRetry, true)
+      XCTAssertEqual(timeoutError, .unacceptableStatusCode(statusCode: 408, data: Data()))
    }
 
    func test_unacceptableStatusCode429_ShouldRetryReturnsTrue() {
@@ -58,6 +74,7 @@ final class HTTPErrorTests: XCTestCase {
 
       // Then
       XCTAssertEqual(rateLimitError.shouldRetry, true)
+      XCTAssertEqual(rateLimitError, .unacceptableStatusCode(statusCode: 429, data: Data()))
    }
 
    func test_unacceptableStatusCode401_ShouldRetryReturnsFalse() {
@@ -66,5 +83,6 @@ final class HTTPErrorTests: XCTestCase {
 
       // Then
       XCTAssertEqual(unauthorizedError.shouldRetry, false)
+      XCTAssertEqual(unauthorizedError, .unacceptableStatusCode(statusCode: 401, data: Data()))
    }
 }

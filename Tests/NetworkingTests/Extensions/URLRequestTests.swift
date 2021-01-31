@@ -46,12 +46,40 @@ final class URLRequestTests: XCTestCase {
       validateCommonAsserts(for: urlRequest)
    }
 
+   func test_InitializationFromEndpointWithToken_ReturnsConfiguredURLRequestInstance() {
+      // Given
+      let urlRequest = URLRequest(endpoint: endpoint, refreshToken: "uvnciod0o39847ygfhejdk")
+
+      // Then
+      validateWithTokenCommonAsserts(for: urlRequest)
+   }
+
+   func test_APIEndpointRequestWithTokenProperty_ReturnsConfiguredURLRequestInstance() {
+      // Given
+      let urlRequest = endpoint.request(refreshToken: "uvnciod0o39847ygfhejdk")
+
+      // Then
+      validateWithTokenCommonAsserts(for: urlRequest)
+   }
+
    private func validateCommonAsserts(for urlRequest: URLRequest) {
       XCTAssertEqual(urlRequest.httpBody, nil)
       XCTAssertEqual(urlRequest.httpMethod, "GET")
       XCTAssertEqual(urlRequest.timeoutInterval, 60.0)
       XCTAssertEqual(urlRequest.allowsCellularAccess, true)
       XCTAssertEqual(urlRequest.url, MockEndpoint.validationUrl)
+      XCTAssertEqual(urlRequest.allowsExpensiveNetworkAccess, false)
+      XCTAssertEqual(urlRequest.allowsConstrainedNetworkAccess, true)
+      XCTAssertEqual(urlRequest.cachePolicy, .useProtocolCachePolicy)
+      XCTAssertEqual(urlRequest.allHTTPHeaderFields, ["Content-Type": "application/json"])
+   }
+
+   private func validateWithTokenCommonAsserts(for urlRequest: URLRequest) {
+      XCTAssertEqual(urlRequest.httpBody, nil)
+      XCTAssertEqual(urlRequest.httpMethod, "GET")
+      XCTAssertEqual(urlRequest.timeoutInterval, 60.0)
+      XCTAssertEqual(urlRequest.allowsCellularAccess, true)
+      XCTAssertEqual(urlRequest.url, MockEndpoint.validationUrlWithToken)
       XCTAssertEqual(urlRequest.allowsExpensiveNetworkAccess, false)
       XCTAssertEqual(urlRequest.allowsConstrainedNetworkAccess, true)
       XCTAssertEqual(urlRequest.cachePolicy, .useProtocolCachePolicy)
@@ -64,6 +92,10 @@ final class URLRequestTests: XCTestCase {
 fileprivate struct MockEndpoint: Endpoint {
    static var validationUrl: URL {
       URL(string: "https://www.test.com/testing?filter=music")!
+   }
+
+   static var validationUrlWithToken: URL {
+      URL(string: "https://www.test.com/testing?refresh_token=uvnciod0o39847ygfhejdk&filter=music")!
    }
 
    var scheme: String {

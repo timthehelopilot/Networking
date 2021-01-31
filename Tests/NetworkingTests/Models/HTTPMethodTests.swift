@@ -21,6 +21,7 @@ final class HTTPMethodTests: XCTestCase {
       // Then
       XCTAssertEqual(getMethod, .get)
       XCTAssertEqual(getMethod.description, rawValue)
+      XCTAssertTrue(getMethod < HTTPMethod(rawValue: "POST")!)
    }
 
    func test_InitializationFromRawValueOf_POST_ReturnsValidInstance() throws {
@@ -32,6 +33,7 @@ final class HTTPMethodTests: XCTestCase {
       // Then
       XCTAssertEqual(postMethod, .post)
       XCTAssertEqual(postMethod.description, rawValue)
+      XCTAssertTrue(postMethod < HTTPMethod(rawValue: "TRACE")!)
    }
 
    func test_InitializationFromRawValueOf_PUT_ReturnsValidInstance() throws {
@@ -43,6 +45,7 @@ final class HTTPMethodTests: XCTestCase {
       // Then
       XCTAssertEqual(putMethod, .put)
       XCTAssertEqual(putMethod.description, rawValue)
+      XCTAssertTrue(putMethod < HTTPMethod(rawValue: "TRACE")!)
    }
 
    func test_InitializationFromRawValueOf_DELETE_ReturnsValidInstance() throws {
@@ -54,6 +57,7 @@ final class HTTPMethodTests: XCTestCase {
       // Then
       XCTAssertEqual(deleteMethod, .delete)
       XCTAssertEqual(deleteMethod.description, rawValue)
+      XCTAssertTrue(deleteMethod < HTTPMethod(rawValue: "OPTIONS")!)
    }
 
    func test_InitializationFromRawValueOf_CONNECT_ReturnsValidInstance() throws {
@@ -65,6 +69,7 @@ final class HTTPMethodTests: XCTestCase {
       // Then
       XCTAssertEqual(connectMethod, .connect)
       XCTAssertEqual(connectMethod.description, rawValue)
+      XCTAssertTrue(connectMethod < HTTPMethod(rawValue: "OPTIONS")!)
    }
 
    func test_InitializationFromRawValueOf_OPTIONS_ReturnsValidInstance() throws {
@@ -76,6 +81,7 @@ final class HTTPMethodTests: XCTestCase {
       // Then
       XCTAssertEqual(optionsMethod, .options)
       XCTAssertEqual(optionsMethod.description, rawValue)
+      XCTAssertTrue(optionsMethod < HTTPMethod(rawValue: "PATCH")!)
    }
 
    func test_InitializationFromRawValueOf_TRACE_ReturnsValidInstance() throws {
@@ -87,6 +93,7 @@ final class HTTPMethodTests: XCTestCase {
       // Then
       XCTAssertEqual(traceMethod, .trace)
       XCTAssertEqual(traceMethod.description, rawValue)
+      XCTAssertTrue(traceMethod > HTTPMethod(rawValue: "CONNECT")!)
    }
 
    func test_InitializationFromRawValueOf_PATCH_ReturnsValidInstance() throws {
@@ -98,6 +105,7 @@ final class HTTPMethodTests: XCTestCase {
       // Then
       XCTAssertEqual(patchMethod, .patch)
       XCTAssertEqual(patchMethod.description, rawValue)
+      XCTAssertTrue(patchMethod < HTTPMethod(rawValue: "TRACE")!)
    }
 
    // MARK: - Helper Methods

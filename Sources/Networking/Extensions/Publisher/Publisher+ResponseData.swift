@@ -19,8 +19,9 @@ public extension Publisher
          if validStatusCodes.contains(response.statusCode) {
             return data
          } else {
-            throw HTTPError.unacceptableStatusCode(statusCode: response.statusCode,
-                                                   data: data)
+            let statusCode = response.statusCode
+
+            throw HTTPError.unacceptableStatusCode(statusCode: statusCode, data: data)
          }
       }
       .mapError { $0 as! HTTPError }

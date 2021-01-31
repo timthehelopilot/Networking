@@ -9,9 +9,9 @@ import Combine
 import XCTest
 @testable import Networking
 
-final class DecodingPublisherTests: XCTestCase {
+final class DecodingPublisherTests: BasePublisherTestCase {
 
-   var cancelables: Set<AnyCancellable> = []
+   // MARK: Unit Tests
 
    func test_DecodingPublisher_EmitsDecodedObject() throws {
       // Given

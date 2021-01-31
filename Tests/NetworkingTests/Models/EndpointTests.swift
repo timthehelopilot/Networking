@@ -10,12 +10,14 @@ import XCTest
 
 final class EndpointTests: XCTestCase {
 
+   // MARK: Unit Tests
+
    func test_EndpointDefaults_ReturnCorrectValues() {
       // Given
       let defaultEndpoint = MockEndpointDefaultConfiguration()
+      let refreshToken = "29fgh5753odjdn920220"
 
       // Then
-
       XCTAssertEqual(defaultEndpoint.httpBody, nil)
       XCTAssertEqual(defaultEndpoint.scheme, "https")
       XCTAssertEqual(defaultEndpoint.queryItems, nil)
@@ -29,8 +31,10 @@ final class EndpointTests: XCTestCase {
       XCTAssertEqual(defaultEndpoint.allowsExpensiveNetworkAccess, true)
       XCTAssertEqual(defaultEndpoint.allowsConstrainedNetworkAccess, true)
       XCTAssertEqual(defaultEndpoint.cachePolicy, .useProtocolCachePolicy)
-      XCTAssertEqual(defaultEndpoint.request(), URLRequest(endpoint: defaultEndpoint))
-      XCTAssertEqual(defaultEndpoint.url(), MockEndpointDefaultConfiguration.validationUrl)
+      XCTAssertEqual(defaultEndpoint.url(refreshToken: refreshToken),
+                     MockEndpointDefaultConfiguration.validationUrl)
+      XCTAssertEqual(defaultEndpoint.request(refreshToken: refreshToken),
+                     URLRequest(endpoint: defaultEndpoint,refreshToken: refreshToken))
    }
 
    func test_CustomEndpoint_ReturnsCorrectValues() {
@@ -38,7 +42,6 @@ final class EndpointTests: XCTestCase {
       let customEndpoint = MockEndpointCustomConfiguration()
 
       // Then
-
       XCTAssertEqual(customEndpoint.scheme, "http")
       XCTAssertEqual(customEndpoint.httpMethod, .post)
       XCTAssertEqual(customEndpoint.timeoutInterval, 30.0)
@@ -61,7 +64,7 @@ final class EndpointTests: XCTestCase {
 
 fileprivate struct MockEndpointDefaultConfiguration: Endpoint {
    static var validationUrl: URL {
-      URL(string: "https://www.testing.com/testing/unit")!
+      URL(string: "https://www.testing.com/testing/unit?refresh_token=29fgh5753odjdn920220")!
    }
 
    var host: String {

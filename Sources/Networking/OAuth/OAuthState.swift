@@ -8,7 +8,7 @@
 import Foundation
 
 /// Used for storing the credentials to access all Netatmo endpoints.
-public struct OAuthState: Codable, Equatable {
+public struct OAuthState {
 
    // MARK: - Properties
 
@@ -27,10 +27,44 @@ public struct OAuthState: Codable, Equatable {
 
       return currentDate < expirationDate
    }
+}
 
+// MARK: - Equatable Conformance
+
+extension OAuthState: Equatable { }
+
+// MARK: - Hashable Conformance
+
+extension OAuthState: Hashable { }
+
+// MARK: - Codable Conformance
+
+extension OAuthState: Codable {
    private enum CodingKeys: String, CodingKey {
       case accessToken = "access_token"
       case refreshToken = "refresh_token"
       case expirationDate = "expires_in"
+   }
+}
+
+// MARK: - Comparable Conformance
+
+extension OAuthState: Comparable {
+   public static func < (lhs: OAuthState, rhs: OAuthState) -> Bool {
+      lhs.accessToken < rhs.accessToken &&
+      lhs.refreshToken < rhs.refreshToken &&
+      lhs.expirationDate < rhs.expirationDate
+   }
+}
+
+// MARK: - CustomStringConvertible Conformance
+
+extension OAuthState: CustomStringConvertible {
+   public var description: String {
+      """
+      AccessToken: \(accessToken),
+      RefreshToken: \(refreshToken),
+      ExpirationDate: \(expirationDate)
+      """
    }
 }
